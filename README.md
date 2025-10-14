@@ -1,36 +1,246 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aplikasi Manajemen Kost
 
-## Getting Started
+Aplikasi web untuk mengelola sistem kost-kostan, termasuk manajemen kamar, penyewa, dan booking requests.
 
-First, run the development server:
+## 📋 Daftar Isi
 
+- [Fitur Utama](#fitur-utama)
+- [Teknologi](#teknologi)
+- [Instalasi](#instalasi)
+- [Cara Menggunakan](#cara-menggunakan)
+- [Struktur Database](#struktur-database)
+
+## ✨ Fitur Utama
+
+### Untuk Admin
+- **Dashboard Admin**: Overview lengkap sistem kost
+- **Manajemen Kamar**: 
+  - Tambah, edit, dan hapus kamar
+  - Atur harga sewa dan fasilitas
+  - Update status ketersediaan kamar
+  - Upload dan kelola foto kamar
+- **Manajemen Penyewa**:
+  - Lihat daftar penyewa aktif
+  - Kelola data penyewa per kamar
+  - Automatic removal saat kamar dikosongkan
+- **Booking Requests**:
+  - Approve/reject permintaan booking
+  - Tracking status pembayaran
+  - Notifikasi booking baru
+
+### Untuk User
+- Browse daftar kamar tersedia
+- Lihat detail kamar dan fasilitas
+- Submit booking request
+- Upload bukti pembayaran
+- Track status booking
+
+## 🛠️ Teknologi
+
+- **Framework**: Next.js 14 (App Router)
+- **UI Library**: React 18
+- **Styling**: Tailwind CSS
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth
+- **Icons**: Lucide React
+- **Deployment**: Vercel
+
+## 📦 Instalasi
+
+### Prerequisites
+- Node.js 18.x atau lebih tinggi
+- npm/yarn/pnpm/bun
+- Akun Supabase
+
+### Langkah Instalasi
+
+1. **Clone repository**
+```bash
+git clone <repository-url>
+cd <project-folder>
+```
+
+2. **Install dependencies**
+```bash
+npm install
+# atau
+yarn install
+# atau
+pnpm install
+# atau
+bun install
+```
+
+3. **Setup environment variables**
+
+Buat file `.env.local` di root project:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+```
+
+4. **Setup Database**
+
+Jalankan migration SQL di Supabase SQL Editor (lihat bagian [Struktur Database](#struktur-database))
+
+5. **Run development server**
 ```bash
 npm run dev
-# or
+# atau
 yarn dev
-# or
+# atau
 pnpm dev
-# or
+# atau
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📖 Cara Menggunakan
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Login Admin
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Navigate ke `/login/admin`
+2. Masukkan kredensial admin
+3. Akan redirect ke dashboard admin
 
-## Learn More
+### Mengelola Kamar
 
-To learn more about Next.js, take a look at the following resources:
+#### Menambah Kamar Baru
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Dashboard Admin → **Manage Rooms**
+2. Klik **"Tambah Kamar"**
+3. Isi form:
+   - Nomor Kamar (contoh: A101, 201)
+   - Harga Sewa Bulanan
+   - Fasilitas (pisahkan dengan koma)
+   - Status Ketersediaan
+4. Klik **"Simpan"**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### Mengedit Kamar
 
-## Deploy on Vercel
+1. Dashboard Admin → **Manage Rooms**
+2. Pilih kamar yang ingin diedit
+3. Klik ikon **edit** atau **Kelola**
+4. Update informasi yang diperlukan
+5. Klik **"Simpan Perubahan"**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### Mengubah Status Ketersediaan
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**⚠️ Perhatian**: Mengubah status dari "Terisi" ke "Tersedia" akan otomatis menghapus semua penyewa dari kamar tersebut.
+
+1. Buka halaman edit kamar
+2. Centang/uncheck checkbox **"Kamar Tersedia"**
+3. Jika mengubah ke "Tersedia", konfirmasi pop-up akan muncul
+4. Klik **"Ya, Lanjutkan"** untuk konfirmasi
+5. Klik **"Simpan Perubahan"**
+
+#### Menghapus Kamar
+
+**⚠️ Zona Berbahaya**: Tindakan ini akan menghapus:
+- Data kamar secara permanen
+- Semua penyewa di kamar tersebut
+- Semua booking requests terkait
+- **TIDAK DAPAT DIBATALKAN**
+
+1. Buka halaman edit kamar
+2. Scroll ke bagian bawah (Zona Berbahaya)
+3. Klik **"Hapus Kamar Permanen"**
+4. Modal konfirmasi akan muncul
+5. Ketik **"HAPUS"** (huruf kapital semua)
+6. Klik **"Hapus Kamar"**
+7. Success modal akan muncul setelah berhasil
+
+### Mengelola Booking Requests
+
+1. Dashboard Admin → **Booking Requests**
+2. Lihat daftar pending requests
+3. Review detail booking:
+   - Informasi user
+   - Kamar yang diminta
+   - Durasi sewa
+   - Bukti pembayaran (jika ada)
+4. Pilih action:
+   - **Approve**: Terima booking
+   - **Reject**: Tolak booking
+
+### Mengelola Penyewa
+
+1. Dashboard Admin → **Manage Tenants**
+2. Lihat daftar penyewa aktif
+3. Filter berdasarkan kamar atau kost
+4. Update informasi penyewa jika diperlukan
+
+### Untuk User/Penyewa
+
+#### Cara Booking Kamar
+
+1. Browse halaman utama
+2. Lihat daftar kamar tersedia
+3. Klik **"Lihat Detail"** pada kamar yang diminati
+4. Klik **"Book Now"** atau **"Pesan Kamar"**
+5. Isi form booking:
+   - Pilih durasi sewa
+   - Pilih metode pembayaran
+6. Submit booking request
+7. Upload bukti pembayaran (jika diminta)
+8. Tunggu approval dari admin
+
+#### Tracking Status Booking
+
+1. Login ke akun user
+2. Navigate ke **"My Bookings"** atau **"Booking Saya"**
+3. Lihat status:
+   - 🟡 **Pending**: Menunggu review admin
+   - 🟢 **Approved**: Booking diterima
+   - 🔴 **Rejected**: Booking ditolak
+
+## 🗄️ Struktur Database
+
+### Tabel Utama
+
+#### `rooms`
+```sql
+- id (uuid, primary key)
+- kost_id (uuid, foreign key → kosts)
+- room_number (text)
+- price (numeric)
+- facilities (text)
+- is_available (boolean)
+- created_at (timestamp)
+```
+
+#### `booking_requests`
+```sql
+- id (uuid, primary key)
+- user_id (uuid, foreign key → profiles)
+- room_id (uuid, foreign key → rooms)
+- kost_id (uuid, foreign key → kosts)
+- status (text: pending/approved/rejected)
+- duration (integer)
+- due_date (date)
+- payment_proof_url (text)
+- created_at (timestamp)
+```
+
+#### `penyewa` (tenants)
+```sql
+- id (uuid, primary key)
+- user_id (uuid, foreign key → profiles)
+- room_id (uuid, foreign key → rooms)
+- kost_id (uuid, foreign key → kosts)
+- start_date (date)
+- end_date (date)
+- status (text)
+- created_at (timestamp)
+```
+
+### Foreign Key Dependencies
+
+Urutan penghapusan data (penting untuk cascade deletes):
+1. `booking_requests` (references rooms)
+2. `penyewa` (references rooms)
+3. `rooms` (main table)
+
+
+**Built with ❤️ using Next.js and Supabase**

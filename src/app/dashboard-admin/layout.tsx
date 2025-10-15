@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// app/dashboard-admin/layout.tsx
 'use client';
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';

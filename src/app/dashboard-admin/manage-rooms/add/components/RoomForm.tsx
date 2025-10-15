@@ -1,4 +1,4 @@
-// src/components/RoomForm.tsx
+// src/app/dashboard-admin/manage-rooms/add/components/RoomForm.tsx
 'use client';
 
 import { useState } from 'react';

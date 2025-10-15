@@ -40,7 +40,7 @@ export default function PaymentMethodForm({ kostId }: PaymentMethodFormProps) {
 
                     {/* Jenis Pembayaran */}
                     <div>
-                        <label className="block text-lg font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+                        <label className="text-lg font-semibold text-gray-900 mb-4 flex items-center space-x-2">
                             <Banknote className="w-5 h-5 text-gray-400" />
                             <span>Jenis Pembayaran</span>
                         </label>
